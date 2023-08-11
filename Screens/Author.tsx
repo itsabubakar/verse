@@ -1,8 +1,10 @@
 import { View, Text } from 'react-native'
 const Author = () => {
     return (
-        <View >
-            <Text className='py-20'>Author</Text>
+        <View className='bg-black flex-1'>
+            <View>
+                <Text className='text-white'>Author</Text>
+            </View>
         </View>
     )
 }

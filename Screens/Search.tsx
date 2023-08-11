@@ -1,8 +1,10 @@
 import { View, Text } from 'react-native'
 const Search = () => {
     return (
-        <View>
-            <Text>Search</Text>
+        <View className='bg-black flex-1'>
+            <View>
+                <Text className='text-white'>Search</Text>
+            </View>
         </View>
     )
 }

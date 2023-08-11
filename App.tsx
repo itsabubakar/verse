@@ -6,6 +6,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import ReadMore from './Screens/ReadMore';
+import Author from './Screens/Author';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,7 +40,15 @@ export default function App() {
   return (
     <NavigationContainer>
       <SafeAreaView className='flex-1'>
-        <MyTabs />
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false
+          }}
+        >
+          <Stack.Screen name="HomeScreen" component={MyTabs} />
+          <Stack.Screen name="readmore" component={ReadMore} />
+          <Stack.Screen name="author" component={Author} />
+        </Stack.Navigator>
       </SafeAreaView>
     </NavigationContainer>
   );

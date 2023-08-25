@@ -39,7 +39,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <SafeAreaView className='flex-1'>
+      <SafeAreaView className='flex-1 bg-black'>
         <Stack.Navigator
           screenOptions={{
             headerShown: false

@@ -28,9 +28,9 @@ const MyTabs = () => {
         >
             <Tab.Screen options={{
                 tabBarIcon: ({ color, size }) => (
-                    <Ionicons name="home-outline" color={color} size={size} />
+                    <Ionicons name="infinite-outline" color={color} size={size} />
                 ),
-            }} name="Home" component={Home} />
+            }} name="Explore" component={Home} />
 
             <Tab.Screen options={{
                 tabBarIcon: ({ color, size }) => (

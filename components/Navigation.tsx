@@ -42,7 +42,7 @@ const MyTabs = () => {
                 tabBarIcon: ({ color, size }) => (
                     <Ionicons name="book-outline" color={color} size={size} />
                 ),
-            }} name="Author" component={Author} />
+            }} name="Authors" component={Author} />
             <Tab.Screen options={{
                 tabBarIcon: ({ color, size }) => (
                     <Ionicons name="bookmarks-outline" color={color} size={size} />

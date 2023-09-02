@@ -8,6 +8,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import ReadMore from './Screens/ReadMore';
 import Author from './Screens/Author';
+import AuthorPage from './Screens/AuthorPage';
 
 const Stack = createNativeStackNavigator();
 
@@ -48,6 +49,7 @@ export default function App() {
           <Stack.Screen name="HomeScreen" component={MyTabs} />
           <Stack.Screen name="readmore" component={ReadMore} />
           <Stack.Screen name="author" component={Author} />
+          <Stack.Screen name="authorpage" component={AuthorPage} />
         </Stack.Navigator>
       </SafeAreaView>
     </NavigationContainer>

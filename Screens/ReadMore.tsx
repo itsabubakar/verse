@@ -43,8 +43,9 @@ const ReadMore: React.FC = () => {
                     </View>
 
                     <TouchableOpacity
+                        className='pb-14'
                         onPress={() => {
-                            navigation.navigate('author', {
+                            navigation.navigate('authorpage', {
                                 author: author,
                             });
                         }}

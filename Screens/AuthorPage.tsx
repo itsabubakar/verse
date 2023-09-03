@@ -50,35 +50,39 @@ const AuthorPage = () => {
 
     return (
         <View className='bg-black flex-1'>
-            <Text className='text-white px-6 pt-4 text-xl'>By {author}</Text>
             {isLoading ? ( // Render loading spinner if isLoading is true
                 <View className='justify-center items-center flex-1'>
                     <LoadingSpinner />
                 </View>
             ) : (
-                <FlatList
-                    className='px-6 py-4'
+                <View className='pb-4'>
+                    <Text className='text-white px-6 pt-4 text-xl'>By {author}</Text>
+                    <FlatList
+                        className='px-6 py-4'
 
-                    data={titles}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            className='py-1 border-b border-[#333333]'
+                        data={titles}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                className='py-1 border-b border-[#333333]'
 
-                            onPress={() => {
-                                const selectedLine = lines.find(line => line.title === item.title);
-                                if (selectedLine) {
-                                    navigation.navigate('readmore', {
-                                        title: item.title,
-                                        lines: selectedLine.lines,
-                                    });
-                                }
-                            }}
-                        >
-                            <Text className='text-lg text-white py-2'>{item.title}</Text>
-                        </TouchableOpacity>
-                    )}
-                />
+                                onPress={() => {
+                                    const selectedLine = lines.find(line => line.title === item.title);
+                                    if (selectedLine) {
+                                        navigation.navigate('readmore', {
+                                            title: item.title,
+                                            lines: selectedLine.lines,
+                                            author,
+
+                                        });
+                                    }
+                                }}
+                            >
+                                <Text className='text-lg text-white py-2'>{item.title}</Text>
+                            </TouchableOpacity>
+                        )}
+                    />
+                </View>
             )}
 
         </View>

@@ -14,6 +14,10 @@ const MyTabs = () => {
             screenOptions={{
                 headerShown: false,
                 tabBarActiveTintColor: 'tomato',
+                tabBarLabelStyle: {
+                    fontSize: 14,
+                    fontFamily: 'cormorantSemiBold'
+                },
                 tabBarStyle: {
                     paddingTop: 8,
                     paddingBottom: 8,

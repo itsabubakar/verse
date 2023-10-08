@@ -13,6 +13,8 @@ const SearchScreen = () => {
     const [query, setQuery] = useState('');
     const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [isError, setError] = useState(false);
+    const [notFound, setNotFound] = useState(false);
     const [selectedTab, setSelectedTab] = useState<'author' | 'title'>('author');
     const textInputRef = useRef<TextInput | null>(null)
     const navigation = useNavigation<any>();
@@ -28,15 +30,25 @@ const SearchScreen = () => {
 
     const handleSearch = async () => {
         try {
+            setError(false);
+            setNotFound(false)
             setIsLoading(true);
             const response = await fetch(`https://poetrydb.org/${selectedTab}/${query}`);
-            const data: SearchResult[] = await response.json();
-            console.log(data);
+            const data: any = await response.json();
 
-            setSearchResults(data);
+            // Check if the response status is 404
+            if (data.status === 404) {
+                setNotFound(true);
+
+            } else {
+                setNotFound(false);
+                setSearchResults(data);
+            }
+
             setIsLoading(false);
         } catch (error) {
             console.error('Error fetching search results:', error);
+            setError(true)
             setIsLoading(false);
         }
     };
@@ -46,7 +58,7 @@ const SearchScreen = () => {
             <View className=''>
                 <TextInput
                     selectionColor="orange"
-                    className='text-white text-2xl font-[eczarRegular] pt-8 pb-2'
+                    className='text-white text-lg font-[eczarRegular] pt-8 pb-2'
                     ref={textInputRef}
                     value={query}
                     onChangeText={(text) => setQuery(text)}
@@ -55,22 +67,23 @@ const SearchScreen = () => {
                 />
             </View>
 
-            <View className='flex-row gap-5 pb-2'>
+            <View className='flex-row pb-4 border-b border-[#333333] justify-between px-5'>
                 <TouchableOpacity
-                    className={` border-white ${selectedTab === 'author' ? 'border-b-2 border-orange' : ''}`}
+                    className={` border-white ${selectedTab === 'author' ? 'border-b-2 border-orange-500' : ''}`}
                     onPress={() => {
                         setSelectedTab('author')
                         setSearchResults([])
+                        setNotFound(false)
                     }}
                 >
                     <Text className='text-white text-xl font-[cormorantMedium] tracking-wide'>Author</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    className={` border-white ${selectedTab === 'title' ? 'border-b-2 border-orange' : ''}`}
+                    className={` border-white  ${selectedTab === 'title' ? 'border-b-2 border-orange-500' : ''}`}
                     onPress={() => {
                         setSelectedTab('title')
                         setSearchResults([])
-
+                        setNotFound(false)
                     }}
                 >
                     <Text className='text-white text-xl font-[cormorantMedium] tracking-wide'>Poem</Text>
@@ -79,45 +92,38 @@ const SearchScreen = () => {
             {isLoading && (
                 <LoadingSpinner />
             )}
-            {searchResults.length === 0 && !isLoading && (
+
+            {searchResults.length === 0 && !isLoading && !isError && !notFound && (
                 <View className='flex-1 justify-center items-center'>
-                    <Text className='text-white font-[cormorantSemiBold] text-2xl'>Enter {selectedTab} to search</Text>
+                    <Text className='text-white font-[cormorantSemiBold] text-lg capitalize'>
+                        Enter {selectedTab} to search
+                    </Text>
                 </View>
             )}
-            {searchResults.length > 0 && !isLoading && (
+
+            {!isLoading && !isError && notFound && (
+                <View className='flex-1 justify-center items-center'>
+                    <Text className='text-white font-[cormorantSemiBold] text-lg capitalize'>
+                        {selectedTab} not found
+                    </Text>
+                </View>
+            )}
+
+            {isError && (
+                <View className='flex-1 justify-center items-center'>
+                    <TouchableOpacity onPress={handleSearch}>
+                        <Text className='text-white text-lg border-2 border-[#3b3b3b] py-2 px-4 rounded-lg mt-4 font-[cormorantSemiBold]'>Error. Click to retry</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
+
+            {searchResults.length > 0 && !isLoading && !isError && (
                 <FlatList
 
                     data={searchResults}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => (
-                        // <View className='border-b border-[#333333] p-5' key={index}>
-                        // <Text className='text-white text-2xl pb-4 font-[cormorantSemiBold]'> {poem.title}</Text>
-                        // {poem.lines.slice(0, 6).map((line, lineIndex) => (
-                        //     <Text className='text-white text-lg font-[cormorantRegular]' key={lineIndex}>{line}</Text>
-                        // ))}
-                        // {poem.lines.length > 6 && (
-                        //     <TouchableOpacity
-                        //         onPress={() => {
-                        //             navigation.navigate('readmore', {
-                        //                 title: poem.title,
-                        //                 lines: poem.lines,
-                        //                 author: poem.author,
-                        //             });
-                        //         }}
-                        //     >
-                        //         <Text className='text-orange-500 py-5'>Read More</Text>
-                        //     </TouchableOpacity>
-                        // )}
-                        //     <TouchableOpacity
-                        //         onPress={() => {
-                        //             navigation.navigate('author', {
-                        //                 author: poem.author,
-                        //             });
-                        //         }}
-                        //     >
-                        //         <Text className='text-[#929292] text-lg font-[ecsarMedium]'>By {poem.author}</Text>
-                        //     </TouchableOpacity>
-                        // </View>
+
                         <View className='border-b border-[#333333] py-3'>
                             <TouchableOpacity
                                 onPress={() => {

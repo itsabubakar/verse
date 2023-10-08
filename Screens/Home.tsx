@@ -17,15 +17,21 @@ const RandomPoems: React.FC = () => {
     const [poems, setPoems] = useState<Poem[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [isError, setError] = useState(false);
+
 
     const fetchRandomPoems = async () => {
         setIsLoading(true);
+        setError(false)
         try {
             const response = await fetch(`https://poetrydb.org/random/${poemsPerPage}`);
             const data: Poem[] = await response.json();
             setPoems(prevPoems => [...prevPoems, ...data]);
         } catch (error) {
-            console.error("Error fetching poems:", error);
+            console.error("Error fetching poems oh:", error);
+            console.log('workna');
+            setError(true)
+
         } finally {
             setIsLoading(false);
             setIsRefreshing(false);
@@ -59,12 +65,12 @@ const RandomPoems: React.FC = () => {
                 <Logo />
             </View>
 
-            <ScrollView className='py-2 border-t border-[#333333]' onScroll={handleScroll}
+            <ScrollView className='py-2 border-t border-[#333333] flex-1' onScroll={handleScroll}
                 refreshControl={<RefreshControl
                     refreshing={isRefreshing}
                     onRefresh={handleRefresh} />}
             >
-                {poems.map((poem, index) => (
+                {!isError && poems.map((poem, index) => (
                     <View className='border-b border-[#333333] p-5' key={index}>
                         <Text className='text-white text-2xl pb-4 font-[cormorantSemiBold]'> {poem.title}</Text>
                         {poem.lines.slice(0, 6).map((line, lineIndex) => (
@@ -94,7 +100,16 @@ const RandomPoems: React.FC = () => {
                         </TouchableOpacity>
                     </View>
                 ))}
+
                 {isLoading && <LoadingSpinner />}
+
+                {isError && !isLoading && (
+                    <View className=' justify-center items-center mt-[50%]'>
+                        <TouchableOpacity className='items-center flex-1 ' onPress={fetchRandomPoems}>
+                            <Text className='text-white  text-lg border-2 border-[#3b3b3b] py-2 px-4 rounded-lg mt-4 font-[cormorantSemiBold]'>Error. Click to retry</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
             </ScrollView>
         </View>
     );

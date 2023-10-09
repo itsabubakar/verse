@@ -1,6 +1,8 @@
 import { useRoute, useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+
 import LoadingSpinner from '../components/Loading';
 
 interface Title {
@@ -55,11 +57,16 @@ const AuthorPage = () => {
                     <LoadingSpinner />
                 </View>
             ) : (
-                <View className='pb-4'>
-                    <Text className='text-white px-6 pt-4 text-xl'>By {author}</Text>
-                    <FlatList
-                        className='px-6 py-4'
+                <View className='py-4 px-6'>
+                    <View className='flex-row items-center pb-4'>
+                        <TouchableOpacity className='mr-auto' onPress={() => navigation.goBack()}>
+                            <Ionicons name="arrow-back-outline" color={'white'} size={30} />
+                        </TouchableOpacity>
 
+                    </View>
+                    <Text className='text-white text-xl border-b border-[#333333] pb-4'>By {author}</Text>
+                    <FlatList
+                        className="pt-4"
                         data={titles}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item }) => (

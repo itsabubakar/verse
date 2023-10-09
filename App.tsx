@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import ReadMore from './Screens/ReadMore';
 import Author from './Screens/Author';
 import AuthorPage from './Screens/AuthorPage';
+import { ContextProvider } from './Context';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,18 +41,20 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <SafeAreaView className='flex-1 bg-black'>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false
-          }}
-        >
-          <Stack.Screen name="HomeScreen" component={MyTabs} />
-          <Stack.Screen name="readmore" component={ReadMore} />
-          <Stack.Screen name="author" component={Author} />
-          <Stack.Screen name="authorpage" component={AuthorPage} />
-        </Stack.Navigator>
-      </SafeAreaView>
+      <ContextProvider className="bg-black">
+        <SafeAreaView className='flex-1 bg-black'>
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false
+            }}
+          >
+            <Stack.Screen name="HomeScreen" component={MyTabs} />
+            <Stack.Screen name="readmore" component={ReadMore} />
+            <Stack.Screen name="author" component={Author} />
+            <Stack.Screen name="authorpage" component={AuthorPage} />
+          </Stack.Navigator>
+        </SafeAreaView>
+      </ContextProvider>
     </NavigationContainer>
   );
 }

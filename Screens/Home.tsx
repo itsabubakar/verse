@@ -61,7 +61,7 @@ const RandomPoems: React.FC = () => {
 
     return (
         <View className='bg-black flex-1'>
-            <View className='py-3'>
+            <View className='py-2'>
                 <Logo />
             </View>
 
@@ -86,7 +86,7 @@ const RandomPoems: React.FC = () => {
                                     });
                                 }}
                             >
-                                <Text className='text-orange-500 py-5'>Read More</Text>
+                                <Text className='text-orange-500 py-5 font-[cormorantSemiBold] text-lg'>Read More</Text>
                             </TouchableOpacity>
                         )}
                         <TouchableOpacity
@@ -96,7 +96,7 @@ const RandomPoems: React.FC = () => {
                                 });
                             }}
                         >
-                            <Text className='text-[#929292] text-lg font-[ecsarMedium]'>By {poem.author}</Text>
+                            <Text className='text-[#929292] font-[ecsarMedium]'>By {poem.author}</Text>
                         </TouchableOpacity>
                     </View>
                 ))}

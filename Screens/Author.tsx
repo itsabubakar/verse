@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import LoadingSpinner from '../components/Loading'; // Import your loading spinner component
+import Ionicons from 'react-native-vector-icons/Ionicons'
+
 
 interface Author {
     author: string;
@@ -34,25 +36,35 @@ const AuthorsScreen: React.FC = () => {
             {isLoading ? ( // Render loading spinner if isLoading is true
                 <View className='justify-center items-center flex-1'>
                     <LoadingSpinner />
+
+
                 </View>
             ) : (
-                <FlatList
-                    className='px-6 py-4 bg-black'
-                    data={authors}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            className='py-1 border-b border-[#333333]'
-                            onPress={() => {
-                                navigation.navigate('authorpage', {
-                                    author: item.author,
-                                });
-                            }}
-                        >
-                            <Text className='text-white text-lg py-2 '>{item.author}</Text>
+                <View>
+                    <View className='flex-row items-center px-6'>
+                        <TouchableOpacity className='mr-auto' onPress={() => navigation.goBack()}>
+                            <Ionicons name="arrow-back-outline" color={'white'} size={30} />
                         </TouchableOpacity>
-                    )}
-                />
+
+                    </View>
+                    <FlatList
+                        className='px-6 py-4 bg-black'
+                        data={authors}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                className='py-1 border-b border-[#333333]'
+                                onPress={() => {
+                                    navigation.navigate('authorpage', {
+                                        author: item.author,
+                                    });
+                                }}
+                            >
+                                <Text className='text-white text-lg py-2 '>{item.author}</Text>
+                            </TouchableOpacity>
+                        )}
+                    />
+                </View>
             )}
         </View>
     );

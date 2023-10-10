@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { View, Text, TouchableOpacity, ScrollView, Share } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MyContext } from '../Context';
+import Toast from 'react-native-toast-message';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const ReadMore: React.FC = () => {
     const route = useRoute();
@@ -11,37 +12,29 @@ const ReadMore: React.FC = () => {
     const { title, lines, author }: any = route.params;
     const { bookMarks, setBookMarks } = useContext<any>(MyContext);
 
-
     useEffect(() => {
         getData();
     }, []);
 
-    const clearAll = async () => {
-        try {
-            await AsyncStorage.clear();
-            console.log('Done.');
-        } catch (e) {
-            console.log(e);
-        }
-    };
+
+    const isBookmarked = bookMarks.some(
+        (bookmark: { title: string; author: string }) => bookmark.title === title && bookmark.author === author
+    );
 
     const handlePoem = async () => {
-        console.log('doing stuff');
-
         const poem = {
             title: title,
             lines: lines,
             author: author,
         };
 
-        // Check if the poem is already bookmarked
-        const isBookmarked = bookMarks.some(
-            (bookmark: { title: string; author: string }) => bookmark.title === title && bookmark.author === author
-        );
-
         if (isBookmarked) {
-            // If bookmarked, remove it
             console.log('book removed');
+            Toast.show({
+                type: 'info',
+                text1: 'Bookmark removed',
+                visibilityTime: 2000,
+            });
 
             const updatedBookmarks = bookMarks.filter(
                 (bookmark: { title: string; author: string }) => !(bookmark.title === title && bookmark.author === author)
@@ -49,8 +42,12 @@ const ReadMore: React.FC = () => {
             setBookMarks(updatedBookmarks);
             await addBookMark(updatedBookmarks);
         } else {
-            // If not bookmarked, add it
             console.log('book added');
+            Toast.show({
+                type: 'error',
+                text1: 'Bookmark added',
+                visibilityTime: 2000,
+            });
             const updatedBookmarks: any = [...bookMarks, poem];
             setBookMarks(updatedBookmarks);
             await addBookMark(updatedBookmarks);
@@ -76,6 +73,29 @@ const ReadMore: React.FC = () => {
             await AsyncStorage.setItem('my-key', jsonValue);
         } catch (e) {
             console.log(e);
+        }
+    };
+
+    const sharePoem = async () => {
+        const poemText = `${title}\n\n${lines.join('\n')}\n\nBy ${author}`;
+
+        try {
+            const result = await Share.share({
+                message: poemText,
+                title: 'Share Poem',
+            });
+
+            if (result.action === Share.sharedAction) {
+                if (result.activityType) {
+                    console.log(`Shared via ${result.activityType}`);
+                } else {
+                    console.log('Shared');
+                }
+            } else if (result.action === Share.dismissedAction) {
+                console.log('Dismissed');
+            }
+        } catch (error) {
+            console.error(error);
         }
     };
 
@@ -110,9 +130,13 @@ const ReadMore: React.FC = () => {
 
                     <View className='flex-row gap-4 py-5'>
                         <TouchableOpacity onPress={handlePoem}>
-                            <Ionicons name="bookmark-outline" color={'white'} size={25} />
+                            <Ionicons
+                                name={isBookmarked ? "bookmark" : "bookmark-outline"}
+                                color={'white'}
+                                size={25}
+                            />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={clearAll}>
+                        <TouchableOpacity onPress={sharePoem}>
                             <Ionicons name="share-social-outline" color={'white'} size={25} />
                         </TouchableOpacity>
                     </View>

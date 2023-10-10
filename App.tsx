@@ -10,6 +10,7 @@ import ReadMore from './Screens/ReadMore';
 import Author from './Screens/Author';
 import AuthorPage from './Screens/AuthorPage';
 import { ContextProvider } from './Context';
+import Toast from 'react-native-toast-message';
 
 const Stack = createNativeStackNavigator();
 
@@ -53,6 +54,7 @@ export default function App() {
             <Stack.Screen name="author" component={Author} />
             <Stack.Screen name="authorpage" component={AuthorPage} />
           </Stack.Navigator>
+          <Toast />
         </SafeAreaView>
       </ContextProvider>
     </NavigationContainer>
